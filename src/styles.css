@@ -2,6 +2,16 @@
 @source "../src";
 @import "tw-animate-css";
 
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "Cairo", "Tajawal", sans-serif;
+  --color-teal: var(--teal);
+  --color-teal-foreground: var(--teal-foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 /*
