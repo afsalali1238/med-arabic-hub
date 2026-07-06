@@ -20,9 +20,9 @@ export function SyllabusView({ weeks, perWeekPct }: Props) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
       <div className="mb-5">
-        <h2 className="text-xl font-bold sm:text-2xl">8-Week Syllabus</h2>
+        <h2 className="text-xl font-bold sm:text-2xl">Medical Arabic for Physiotherapists</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Complete each week's scenario to unlock full tracking, or preview upcoming weeks.
+          An 8-week syllabus. Complete each week's scenario to unlock full tracking, or preview upcoming weeks.
         </p>
       </div>
 
