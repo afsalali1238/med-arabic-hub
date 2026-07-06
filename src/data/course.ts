@@ -79,6 +79,7 @@ export const WEEKS: Week[] = [
 
 export interface VocabEntry {
   id: string;
+  english: string;
   arabic: string;
   transliteration: string;
   note?: string;

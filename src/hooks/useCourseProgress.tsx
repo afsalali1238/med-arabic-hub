@@ -288,7 +288,7 @@ function useCourseProgressProvider() {
   const calculateWeekProgress = useCallback(
     (weekId: string) => {
       const week = WEEKS.find((w) => w.id === weekId);
-      if (!week) return { done: 0, total: 1, pct: 0 };
+      if (!week) return { doneCheckpoints: 0, scenarioDone: 0, doneTotal: 0, total: 1, pct: 0 };
 
       const done = week.checkpoints.filter((c) =>
         progress.completedCheckpoints.includes(c.id),

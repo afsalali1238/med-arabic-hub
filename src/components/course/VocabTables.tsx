@@ -86,9 +86,9 @@ export function VocabTables({ tables, onSaveToVocab }: Props) {
                             const arabic = arabicCell ?? "";
                             const transliteration = transCell ?? row[row.length - 1];
                             onSaveToVocab({
+                              english: row[0],
                               arabic,
                               transliteration,
-                              note: row[0],
                             });
                             toast.success("Added to Vocabulary Bank");
                           }}

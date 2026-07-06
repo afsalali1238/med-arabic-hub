@@ -5,6 +5,7 @@ const ICONS = {
   video: { icon: Video, emoji: "📺", label: "Video", tint: "text-rose-600 bg-rose-50" },
   audio: { icon: Headphones, emoji: "🎧", label: "Audio", tint: "text-violet-600 bg-violet-50" },
   article: { icon: FileText, emoji: "📝", label: "Article", tint: "text-teal-700 bg-teal-50" },
+  docs: { icon: FileText, emoji: "📄", label: "Document", tint: "text-slate-600 bg-slate-50" },
 } as const;
 
 export function ResourceGrid({ resources }: { resources: Resource[] }) {

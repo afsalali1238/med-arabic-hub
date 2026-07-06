@@ -15,7 +15,7 @@ export function BottomNav({ vocabCount }: Props) {
     { to: "/dictionary", label: "Dictionary", Icon: Search },
     { to: "/vocab", label: "Vocab Bank", Icon: BookOpen, badge: vocabCount },
     { to: "/stats", label: "Stats", Icon: TrendingUp },
-  ] as const;
+  ];
 
   return (
     <nav

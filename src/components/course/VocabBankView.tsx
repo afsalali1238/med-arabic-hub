@@ -29,6 +29,7 @@ interface Props {
 export function VocabBankView({ entries, onAdd, onRemove, onUpdate, onReview }: Props) {
   const [arabic, setArabic] = useState("");
   const [translit, setTranslit] = useState("");
+  const [english, setEnglish] = useState("");
   const [note, setNote] = useState("");
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<"list" | "flashcards">("list");
@@ -56,10 +57,12 @@ export function VocabBankView({ entries, onAdd, onRemove, onUpdate, onReview }: 
     onAdd({
       arabic: arabic.trim(),
       transliteration: translit.trim(),
+      english: english.trim(),
       note: note.trim() || undefined,
     });
     setArabic("");
     setTranslit("");
+    setEnglish("");
     setNote("");
   };
 
@@ -182,7 +185,17 @@ export function VocabBankView({ entries, onAdd, onRemove, onUpdate, onReview }: 
               onChange={(e) => setTranslit(e.target.value)}
             />
           </div>
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-1">
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">
+              English Meaning
+            </label>
+            <Input
+              placeholder="e.g. pain"
+              value={english}
+              onChange={(e) => setEnglish(e.target.value)}
+            />
+          </div>
+          <div className="sm:col-span-1">
             <label className="mb-1 block text-xs font-medium text-muted-foreground">
               Note (optional)
             </label>
@@ -228,6 +241,7 @@ export function VocabBankView({ entries, onAdd, onRemove, onUpdate, onReview }: 
                         <p dir="auto" className="font-arabic text-xl sm:text-2xl text-foreground">
                           {e.arabic || e.transliteration}
                         </p>
+                        <p className="ml-3 font-semibold text-foreground">{e.english}</p>
                         {(e.arabic || e.transliteration) && (
                           <SpeakButton
                             text={e.arabic || e.transliteration}

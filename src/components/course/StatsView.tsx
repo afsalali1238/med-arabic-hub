@@ -64,7 +64,7 @@ export function StatsView({
   vocabCount,
   globalPct,
   xp = 0,
-  level = LEVELS[0],
+  level = { ...LEVELS[0], next: LEVELS[1] },
   onExport,
   onExportAnkiCSV,
   onImport,
