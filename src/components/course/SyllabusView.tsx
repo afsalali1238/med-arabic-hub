@@ -155,6 +155,23 @@ export function SyllabusView({ weeks, perWeekPct }: Props) {
           </a>
 
           <a
+            href="https://pharmarab.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm"
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                Medical Arabic (Pharmacy)
+              </h3>
+              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Conversational Medical Arabic tailored specifically for Pharmacists.
+            </p>
+          </a>
+
+          <a
             href="https://proviacv.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
