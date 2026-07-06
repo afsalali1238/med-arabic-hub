@@ -10,20 +10,11 @@ export function BottomNav({ vocabCount }: Props) {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  // Extract trackId from the current path if it exists
-  const trackMatch = currentPath.match(/^\/([^/]+)/);
-  const trackId = trackMatch ? trackMatch[1] : null;
-
-  // If we are on the landing page, don't show the bottom nav links or default them
-  if (!trackId) {
-    return null;
-  }
-
   const items = [
-    { to: `/${trackId}`, label: "Syllabus", Icon: LayoutList },
-    { to: `/${trackId}/dictionary`, label: "Dictionary", Icon: Search },
-    { to: `/${trackId}/vocab`, label: "Vocab Bank", Icon: BookOpen, badge: vocabCount },
-    { to: `/${trackId}/stats`, label: "Stats", Icon: TrendingUp },
+    { to: "/", label: "Syllabus", Icon: LayoutList },
+    { to: "/dictionary", label: "Dictionary", Icon: Search },
+    { to: "/vocab", label: "Vocab Bank", Icon: BookOpen, badge: vocabCount },
+    { to: "/stats", label: "Stats", Icon: TrendingUp },
   ];
 
   return (

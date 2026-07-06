@@ -9,14 +9,8 @@ import React, {
 } from "react";
 import { toast } from "sonner";
 import type { VocabEntry } from "@/data/course";
-import {
-  WEEKS,
-  XP_PER_QUIZ,
-  XP_PER_FLASHCARD,
-  XP_PER_WEEK,
-  levelForXp,
-  TRACKS,
-} from "@/data/course";
+import { WEEKS, XP_PER_QUIZ, XP_PER_FLASHCARD, XP_PER_WEEK, levelForXp } from "@/data/course";
+
 const STORAGE_KEY = "medical-arabic-course-v1";
 
 export interface CourseProgress {
@@ -292,10 +286,8 @@ function useCourseProgressProvider() {
   }, []);
 
   const calculateWeekProgress = useCallback(
-    (trackId: string, weekId: string) => {
-      const track = TRACKS.find((t) => t.id === trackId);
-      if (!track) return { doneCheckpoints: 0, scenarioDone: 0, doneTotal: 0, total: 1, pct: 0 };
-      const week = track.weeks.find((w) => w.id === weekId);
+    (weekId: string) => {
+      const week = WEEKS.find((w) => w.id === weekId);
       if (!week) return { doneCheckpoints: 0, scenarioDone: 0, doneTotal: 0, total: 1, pct: 0 };
 
       const done = week.checkpoints.filter((c) =>
@@ -314,39 +306,32 @@ function useCourseProgressProvider() {
     [progress.completedCheckpoints, progress.assignments],
   );
 
-  const calculateOverallProgress = useCallback(
-    (trackId: string) => {
-      const track = TRACKS.find((t) => t.id === trackId);
-      if (!track) return { globalCompleted: 0, totalCheckpoints: 1, globalPct: 0 };
-      const totalCheckpoints = track.weeks.reduce((n, w) => n + w.checkpoints.length + 1, 0);
-      const globalCompleted =
-        progress.completedCheckpoints.length +
-        Object.values(progress.assignments).filter((a) => a.submitted).length;
+  const calculateOverallProgress = useCallback(() => {
+    const totalCheckpoints = WEEKS.reduce((n, w) => n + w.checkpoints.length + 1, 0);
+    const globalCompleted =
+      progress.completedCheckpoints.length +
+      Object.values(progress.assignments).filter((a) => a.submitted).length;
 
-      return {
-        globalCompleted,
-        totalCheckpoints,
-        globalPct: totalCheckpoints ? Math.round((globalCompleted / totalCheckpoints) * 100) : 0,
-      };
-    },
-    [progress.completedCheckpoints, progress.assignments],
-  );
+    return {
+      globalCompleted,
+      totalCheckpoints,
+      globalPct: totalCheckpoints ? Math.round((globalCompleted / totalCheckpoints) * 100) : 0,
+    };
+  }, [progress.completedCheckpoints, progress.assignments]);
 
   const xp = useMemo(() => {
     let total = 0;
     total += progress.completedCheckpoints.length * XP_PER_QUIZ;
     total += progress.vocabBank.length * XP_PER_FLASHCARD;
 
-    TRACKS.forEach((track) => {
-      track.weeks.forEach((week) => {
-        const done = week.checkpoints.filter((c) =>
-          progress.completedCheckpoints.includes(c.id),
-        ).length;
-        const scenarioDone = progress.assignments[week.id]?.submitted ? 1 : 0;
-        if (done + scenarioDone === week.checkpoints.length + 1) {
-          total += XP_PER_WEEK;
-        }
-      });
+    WEEKS.forEach((week) => {
+      const done = week.checkpoints.filter((c) =>
+        progress.completedCheckpoints.includes(c.id),
+      ).length;
+      const scenarioDone = progress.assignments[week.id]?.submitted ? 1 : 0;
+      if (done + scenarioDone === week.checkpoints.length + 1) {
+        total += XP_PER_WEEK;
+      }
     });
     return total;
   }, [progress]);
