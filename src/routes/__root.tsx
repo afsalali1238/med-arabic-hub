@@ -35,7 +35,6 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
@@ -84,6 +83,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Learn conversational Medical Arabic for the physiotherapy clinic with an 8-week gamified course covering greetings, assessment, movement commands and discharge.",
       },
       { name: "author", content: "Movement & Healing" },
+      { name: "theme-color", media: "(prefers-color-scheme: light)", content: "#f8fafc" },
+      { name: "theme-color", media: "(prefers-color-scheme: dark)", content: "#020817" },
       {
         property: "og:title",
         content: "Medical Arabic for Physiotherapists",
@@ -95,33 +96,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "Medical Arabic for Physiotherapists" },
-      { name: "twitter:title", content: "Medical Arabic for Physiotherapists" },
-      { name: "description", content: "Learn conversational Medical Arabic for the physiotherapy clinic with an 8-week gamified course covering greetings, assessment, movement commands and discharge." },
-      { property: "og:description", content: "Learn conversational Medical Arabic for the physiotherapy clinic with an 8-week gamified course covering greetings, assessment, movement commands and discharge." },
-      { name: "twitter:description", content: "Learn conversational Medical Arabic for the physiotherapy clinic with an 8-week gamified course covering greetings, assessment, movement commands and discharge." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2c65f4c2-2a25-45e1-803c-6a1e1d93beed/id-preview-97c20722--94eb1a76-115b-442a-abba-e6f1c8c5d542.lovable.app-1783157516900.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2c65f4c2-2a25-45e1-803c-6a1e1d93beed/id-preview-97c20722--94eb1a76-115b-442a-abba-e6f1c8c5d542.lovable.app-1783157516900.png" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossOrigin: "anonymous",
-      },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
-
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -130,9 +119,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body>
         {children}
@@ -142,13 +145,126 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+import { CourseProgressProvider, useCourseProgress } from "@/hooks/useCourseProgress";
+import { WEEKS, COURSE_TITLE } from "@/data/course";
+import { AppHeader } from "@/components/course/AppHeader";
+import { BottomNav } from "@/components/course/BottomNav";
+import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRef, useMemo, useState } from "react";
+import { useLocation } from "@tanstack/react-router";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <CourseProgressProvider>
+        <CourseLayout />
+      </CourseProgressProvider>
     </QueryClientProvider>
+  );
+}
+
+function CourseLayout() {
+  const { progress, hydrated, calculateWeekProgress, xp, level } = useCourseProgress();
+
+  const { width, height } = useWindowSize();
+  const [showConfetti, setShowConfetti] = useState(false);
+  const location = useLocation();
+  const isWeekRoute = location.pathname.startsWith("/week/");
+
+  const perWeekPct = useMemo(() => {
+    const map: Record<string, number> = {};
+    WEEKS.forEach((w) => {
+      map[w.id] = calculateWeekProgress(w.id).pct;
+    });
+    return map;
+  }, [progress.completedCheckpoints, progress.assignments, calculateWeekProgress]);
+
+  const prevWeekPct = useRef<Record<string, number>>({});
+  const prevLevel = useRef<number | null>(null);
+
+  const fireConfetti = () => {
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 4000);
+  };
+
+  useEffect(() => {
+    if (!hydrated) {
+      prevWeekPct.current = perWeekPct;
+      prevLevel.current = level.level;
+      return;
+    }
+
+    if (prevLevel.current !== null && level.level > prevLevel.current) {
+      toast.success(`Level Up!`, { description: `You reached ${level.title}` });
+      fireConfetti();
+    }
+    prevLevel.current = level.level;
+
+    Object.entries(perWeekPct).forEach(([wid, pct]) => {
+      if (
+        pct === 100 &&
+        prevWeekPct.current[wid] !== 100 &&
+        prevWeekPct.current[wid] !== undefined
+      ) {
+        const w = WEEKS.find((x) => x.id === wid);
+        if (w) {
+          toast.success(`Week ${w.number} complete`, { description: w.title });
+          fireConfetti();
+        }
+      }
+    });
+    prevWeekPct.current = perWeekPct;
+  }, [perWeekPct, level.level, hydrated]);
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <Toaster />
+      {showConfetti && (
+        <Confetti
+          width={width}
+          height={height}
+          numberOfPieces={220}
+          recycle={false}
+          gravity={0.25}
+          colors={["#2563eb", "#14b8a6", "#38bdf8", "#0ea5e9", "#5eead4"]}
+          style={{ zIndex: 100 }}
+        />
+      )}
+
+      {!isWeekRoute && (
+        <AppHeader
+          title={COURSE_TITLE}
+          progressPct={
+            level.next
+              ? Math.min(100, Math.round(((xp - level.min) / (level.next.min - level.min)) * 100))
+              : 100
+          }
+          levelTitle={level.title}
+          levelLevel={level.level}
+          xp={xp}
+        />
+      )}
+
+      <main className={isWeekRoute ? "flex-1" : "flex-1 pb-20"}>
+        {!hydrated ? (
+          <div className="mx-auto max-w-3xl p-6 space-y-4">
+            <Skeleton className="h-[200px] w-full rounded-2xl" />
+            <Skeleton className="h-12 w-full rounded-2xl" />
+            <Skeleton className="h-24 w-full rounded-2xl" />
+            <Skeleton className="h-24 w-full rounded-2xl" />
+          </div>
+        ) : (
+          <Outlet />
+        )}
+      </main>
+
+      {!isWeekRoute && <BottomNav vocabCount={progress.vocabBank.length} />}
+    </div>
   );
 }
