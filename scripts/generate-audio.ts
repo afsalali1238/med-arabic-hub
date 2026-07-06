@@ -1,9 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-import * as googleTTS from 'google-tts-api';
-import { WEEKS } from '../src/data/course';
+import fs from "fs";
+import path from "path";
+import * as googleTTS from "google-tts-api";
+import { WEEKS } from "../src/data/course";
 
-const AUDIO_DIR = path.join(process.cwd(), 'public/audio');
+const AUDIO_DIR = path.join(process.cwd(), "public/audio");
 
 async function getAudioFilename(text: string) {
   const msgBuffer = new TextEncoder().encode(text);
@@ -19,14 +19,14 @@ async function downloadAudio(text: string, filename: string) {
     console.log(`Skipping ${filename} (already exists)`);
     return;
   }
-  
+
   try {
     const url = googleTTS.getAudioUrl(text, {
-      lang: 'ar',
+      lang: "ar",
       slow: false,
-      host: 'https://translate.google.com',
+      host: "https://translate.google.com",
     });
-    
+
     const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const buffer = await response.arrayBuffer();
@@ -60,9 +60,9 @@ async function main() {
   for (const text of allArabicStrings) {
     const filename = await getAudioFilename(text);
     await downloadAudio(text, filename);
-    await new Promise(r => setTimeout(r, 500)); // Rate limiting
+    await new Promise((r) => setTimeout(r, 500)); // Rate limiting
   }
-  
+
   console.log("Audio generation complete.");
 }
 

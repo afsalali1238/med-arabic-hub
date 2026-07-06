@@ -43,7 +43,7 @@ export function ClinicalScenario({
       toast.error("Write your consultation before submitting.");
       return;
     }
-    
+
     // Auto-grade using fuzzy matching
     if (fuzzyMatchArabic(answers, scenario.answerKey.arabic)) {
       if (onSelfScoreChange) onSelfScoreChange("nailed-it");
@@ -51,7 +51,7 @@ export function ClinicalScenario({
     } else {
       toast.success("Consultation submitted — review the answer key below.");
     }
-    
+
     onSubmit();
     setDrawerOpen(true);
   };

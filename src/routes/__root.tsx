@@ -149,7 +149,7 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 import { CourseProgressProvider, useCourseProgress } from "@/hooks/useCourseProgress";
-import { WEEKS, COURSE_TITLE } from "@/data/course";
+import { WEEKS, TRACKS } from "@/data/course";
 import { AppHeader } from "@/components/course/AppHeader";
 import { BottomNav } from "@/components/course/BottomNav";
 import Confetti from "react-confetti";
@@ -178,7 +178,12 @@ function CourseLayout() {
   const { width, height } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);
   const location = useLocation();
-  const isWeekRoute = location.pathname.startsWith("/week/");
+  const isWeekRoute = location.pathname.includes("/week/");
+
+  const trackMatch = location.pathname.match(/^\/([^/]+)/);
+  const trackId = trackMatch ? trackMatch[1] : null;
+  const activeTrack = TRACKS.find((t) => t.id === trackId);
+  const headerTitle = activeTrack ? activeTrack.title : "Med-Arabic-Hub";
 
   const perWeekPct = useMemo(() => {
     const map: Record<string, number> = {};
@@ -242,7 +247,7 @@ function CourseLayout() {
 
       {!isWeekRoute && (
         <AppHeader
-          title={COURSE_TITLE}
+          title={headerTitle}
           progressPct={
             level.next
               ? Math.min(100, Math.round(((xp - level.min) / (level.next.min - level.min)) * 100))

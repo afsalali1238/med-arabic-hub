@@ -10,21 +10,23 @@
 export function normalizeArabic(text: string): string {
   if (!text) return "";
 
-  return text
-    // Remove diacritics (Tashkeel)
-    .replace(/[\u064B-\u065F\u0670]/g, "")
-    // Normalize Alif
-    .replace(/[أإآ]/g, "ا")
-    // Normalize Yaa
-    .replace(/ى/g, "ي")
-    // Normalize Ta Marbuta
-    .replace(/ة/g, "ه")
-    // Remove punctuation
-    .replace(/[.,/#!$%^&*;:{}=\-_`~()؟،]/g, "")
-    // Normalize spaces
-    .replace(/\s{2,}/g, " ")
-    .trim()
-    .toLowerCase();
+  return (
+    text
+      // Remove diacritics (Tashkeel)
+      .replace(/[\u064B-\u065F\u0670]/g, "")
+      // Normalize Alif
+      .replace(/[أإآ]/g, "ا")
+      // Normalize Yaa
+      .replace(/ى/g, "ي")
+      // Normalize Ta Marbuta
+      .replace(/ة/g, "ه")
+      // Remove punctuation
+      .replace(/[.,/#!$%^&*;:{}=\-_`~()؟،]/g, "")
+      // Normalize spaces
+      .replace(/\s{2,}/g, " ")
+      .trim()
+      .toLowerCase()
+  );
 }
 
 /**

@@ -1,21 +1,25 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import { WEEKS, COURSE_TITLE } from "@/data/course";
+import { TRACKS, COURSE_TITLE } from "@/data/course";
 import { useCourseProgress } from "@/hooks/useCourseProgress";
 import { WeekView } from "@/components/course/WeekView";
 import { AppHeader } from "@/components/course/AppHeader";
 import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
 
-export const Route = createFileRoute("/week/$weekId")({
+export const Route = createFileRoute("/$trackId/week/$weekId")({
   component: WeekRoute,
 });
 
 function WeekRoute() {
-  const { weekId } = Route.useParams();
+  const { trackId, weekId } = Route.useParams();
   const navigate = useNavigate();
 
-  const activeWeek = useMemo(() => WEEKS.find((w) => w.id === weekId) ?? null, [weekId]);
+  const track = useMemo(() => TRACKS.find((t) => t.id === trackId) ?? null, [trackId]);
+  const activeWeek = useMemo(
+    () => track?.weeks.find((w) => w.id === weekId) ?? null,
+    [track, weekId],
+  );
 
   const {
     progress,
@@ -29,7 +33,7 @@ function WeekRoute() {
     calculateWeekProgress,
   } = useCourseProgress();
 
-  const { globalPct } = calculateOverallProgress();
+  const { globalPct } = calculateOverallProgress(trackId);
 
   if (!hydrated) return null;
 
@@ -51,7 +55,7 @@ function WeekRoute() {
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-4 pt-4 sm:px-6">
           <Link
-            to="/"
+            to={`/${trackId}`}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -64,7 +68,7 @@ function WeekRoute() {
           checkpointScores={progress.checkpointScores}
           assignment={progress.assignments[activeWeek.id] ?? { answers: "", submitted: false }}
           note={progress.notes[activeWeek.id] ?? ""}
-          weekProgress={calculateWeekProgress(activeWeek.id)}
+          weekProgress={calculateWeekProgress(trackId, activeWeek.id)}
           onToggleCheckpoint={toggleCheckpoint}
           onSetCheckpointScore={setCheckpointScore}
           onSetAssignment={(patch) => setAssignment(activeWeek.id, patch)}

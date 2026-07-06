@@ -1,0 +1,55 @@
+import { Week } from "../course";
+
+export const week5: Week = {
+  id: "pharmacy-week-5",
+  number: 5,
+  title: "Scheduling: Dosage, Frequency & Timings",
+  timeAllocation: "45-60 minutes",
+  coreConcepts: ["Frequency", "Timing of doses"],
+  focusAreas: [{ title: "Timing", description: "When to take the medication." }],
+  vocabTables: [
+    {
+      caption: "Dosage, Frequency & Timings",
+      headers: ["English", "Arabic", "Transliteration"],
+      rows: [
+        ["Before Meals", "قبل الطعام", "Qabla al-ta'am"],
+        ["At Bedtime", "قبل النوم", "Qabel annaoom"],
+        ["In the Morning", "في الصباح", "Fi al-sabah"],
+        ["In the Evening", "في المساء", "Fi al-masaa'"],
+        ["Before Noon", "قبل الظهر", "Qabel azzuhur"],
+        ["Every Hour", "كل ساعة", "Kul saa'ah"],
+        ["Every 6 Hours", "كل 6 ساعات", "Kul set saa'aat"],
+        ["Every 8 Hours", "كل 8 ساعات", "Kul thamaan saa'aat"],
+        ["Every 12 Hours", "كل 12 ساعة", "Kul ethnay asharah saa'ah"],
+        ["One Teaspoonful", "ملعقة شاي واحدة", "Melaqet shaay waahedah"],
+        ["One Tablespoonful", "ملعقة واحدة كبيرة", "Melaqah waahedah kabeerah"],
+        ["For Ten Days", "لمدة عشرة أيام", "Lemuddat ashrat ayyaam"],
+        ["For One Week", "لمدة أسبوع", "Lemudatusboo'"],
+        ["Once Weekly", "مرة في الأسبوع", "Marrah fel esboo'"],
+        ["Twice Daily", "مرتين في اليوم", "Marratayn fee alyoom"],
+        [
+          "One Tablet Three Times Daily",
+          "حبة ثلاث مرات في اليوم",
+          "Habbah thalaath marraat fee alyoom",
+        ],
+        ["Once Daily", "مرة في اليوم", "Marrah fee alyoom"],
+        ["Three Times Daily", "ثلاث مرات في اليوم", "Thalaath marraat fee alyoom"],
+        ["Four Times Daily", "أربع مرات في اليوم", "Arba' marraat fee alyoom"],
+        ["Daily", "يومياً", "Yaoomeyyan"],
+        ["Divided Doses", "مقسمة إلى عدة جرعات", "Muqassamah elaa eddat jura'aat"],
+        ["Gradually", "تدريجياً", "Tadreejyyan"],
+      ],
+    },
+  ],
+  resources: [],
+  checkpoints: [{ id: "pharmacy-wk5-cp1", label: "Timing Quiz" }],
+  scenario: {
+    patient: "Instruct the patient to take the pill twice daily.",
+    instructions: "Translate: 'Twice daily'",
+    answerKey: {
+      arabic: "مرتين في اليوم",
+      transliteration: "Marratayn fee alyoom",
+      rationale: "Frequency instructions.",
+    },
+  },
+};

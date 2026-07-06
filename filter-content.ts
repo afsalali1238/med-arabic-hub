@@ -1,8 +1,17 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 // Import the current data
-import { WEEKS as physioWeeks, COURSE_TITLE, COURSE_SUBTITLE, CAPSTONE, LEVELS, XP_PER_QUIZ, XP_PER_FLASHCARD, XP_PER_WEEK } from './src/data/course';
+import {
+  WEEKS as physioWeeks,
+  COURSE_TITLE,
+  COURSE_SUBTITLE,
+  CAPSTONE,
+  LEVELS,
+  XP_PER_QUIZ,
+  XP_PER_FLASHCARD,
+  XP_PER_WEEK,
+} from "./src/data/course";
 
 // We want to clean up weeks 9, 10, 11, and 12
 const termsToRemove = [
@@ -43,26 +52,22 @@ const termsToRemove = [
   "Store in a refrigerator",
   "Complete the course",
   "Alternative (Generic)",
-  "Up to the mark"
+  "Up to the mark",
 ];
 
 for (const w of physioWeeks) {
   if (w.number >= 9) {
     for (const table of w.vocabTables) {
       // Filter out rows where the English term is in termsToRemove
-      table.rows = table.rows.filter(row => !termsToRemove.includes(row[0]));
+      table.rows = table.rows.filter((row) => !termsToRemove.includes(row[0]));
     }
   }
 }
 
 // Add a specific physio replacement for Pharmacy
-const week9 = physioWeeks.find(w => w.number === 9);
+const week9 = physioWeeks.find((w) => w.number === 9);
 if (week9) {
-  week9.vocabTables[0].rows.push([
-    "Rehab Center / Clinic",
-    "مركز تأهيل",
-    "Markaz Ta'heel"
-  ]);
+  week9.vocabTables[0].rows.push(["Rehab Center / Clinic", "مركز تأهيل", "Markaz Ta'heel"]);
 }
 
 const newContent = `export type ResourceType = "video" | "audio" | "article" | "docs";
@@ -141,5 +146,5 @@ export function levelForXp(xp: number) {
 }
 `;
 
-fs.writeFileSync('./src/data/course.ts', newContent);
+fs.writeFileSync("./src/data/course.ts", newContent);
 console.log("Successfully filtered irrelevant terms from course.ts");

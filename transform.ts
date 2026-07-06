@@ -1,15 +1,20 @@
-import * as fs from 'fs';
-import { WEEKS as oldWeeks, COURSE_TITLE, COURSE_SUBTITLE, LEVELS as oldLevels } from './src/data/course';
+import * as fs from "fs";
+import {
+  WEEKS as oldWeeks,
+  COURSE_TITLE,
+  COURSE_SUBTITLE,
+  LEVELS as oldLevels,
+} from "./src/data/course";
 
-const newWeeks = oldWeeks.map(w => {
+const newWeeks = oldWeeks.map((w) => {
   // Group vocab into tables by category
-  const categories = Array.from(new Set(w.vocab.map(v => v.category)));
-  const vocabTables = categories.map(cat => ({
+  const categories = Array.from(new Set(w.vocab.map((v) => v.category)));
+  const vocabTables = categories.map((cat) => ({
     caption: cat,
     headers: ["English", "Arabic Script", "Transliteration", "Context"],
-    rows: w.vocab.filter(v => v.category === cat).map(v => [
-      v.english, v.arabic, v.translit, v.context || ""
-    ])
+    rows: w.vocab
+      .filter((v) => v.category === cat)
+      .map((v) => [v.english, v.arabic, v.translit, v.context || ""]),
   }));
 
   return {
@@ -21,19 +26,19 @@ const newWeeks = oldWeeks.map(w => {
     focusAreas: [
       {
         title: "Overview",
-        description: w.overview
-      }
+        description: w.overview,
+      },
     ],
     vocabTables,
-    resources: w.resources.map(r => ({
+    resources: w.resources.map((r) => ({
       type: r.type,
       title: r.label,
       description: "",
-      url: r.url
+      url: r.url,
     })),
     checkpoints: w.checkpoints.map((c, idx) => ({
       id: `w${w.id}-c${idx + 1}`,
-      label: c
+      label: c,
     })),
     scenario: {
       patient: w.assignment.scenario,
@@ -41,9 +46,9 @@ const newWeeks = oldWeeks.map(w => {
       answerKey: {
         arabic: w.assignment.answerArabic,
         transliteration: w.assignment.answerTranslit,
-        rationale: w.assignment.rationale
-      }
-    }
+        rationale: w.assignment.rationale,
+      },
+    },
   };
 });
 
@@ -121,4 +126,4 @@ export function levelForXp(xp: number) {
 }
 `;
 
-fs.writeFileSync('./src/data/course.ts', newContent);
+fs.writeFileSync("./src/data/course.ts", newContent);

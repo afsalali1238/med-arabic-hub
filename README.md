@@ -4,24 +4,25 @@ Med-Arabic-Hub is a dedicated, offline-first mobile web application designed to 
 
 ## 🚀 Features
 
-* **12-Week Specialized Curriculum**: Covers Greetings, Musculoskeletal Anatomy, Pain Assessment, Range of Motion Commands, and De-escalation/Empathy.
-* **SuperMemo-2 (SM-2) Spaced Repetition**: Anki-style algorithmic flashcards track retention and automatically resurface words when you are about to forget them.
-* **Fuzzy Arabic Assessment**: Practice typing Arabic freely! The custom assessment engine intelligently strips *harakat* (diacritics) and normalizes tricky letters (like Alif variants or Ta Marbuta) so you're graded on comprehension, not perfect keyboard spelling.
-* **Global Clinical Dictionary**: Instantly search all medical terminology from across the 12 weeks. Play audio pronunciations mid-session or bookmark words directly to your SRS flashcard bank.
-* **True MP3 Audio Generation**: Every Arabic string is run through a custom pipeline that hits the Google TTS API to generate and cache highly accurate, native-sounding MP3 files (`public/audio/`).
-* **Offline-First & Gamified**: Powered entirely on the client side via `localStorage`. Earn XP, level up your clinical rank, and track progress without needing an internet connection on the clinic floor.
+- **12-Week Specialized Curriculum**: Covers Greetings, Musculoskeletal Anatomy, Pain Assessment, Range of Motion Commands, and De-escalation/Empathy.
+- **SuperMemo-2 (SM-2) Spaced Repetition**: Anki-style algorithmic flashcards track retention and automatically resurface words when you are about to forget them.
+- **Fuzzy Arabic Assessment**: Practice typing Arabic freely! The custom assessment engine intelligently strips _harakat_ (diacritics) and normalizes tricky letters (like Alif variants or Ta Marbuta) so you're graded on comprehension, not perfect keyboard spelling.
+- **Global Clinical Dictionary**: Instantly search all medical terminology from across the 12 weeks. Play audio pronunciations mid-session or bookmark words directly to your SRS flashcard bank.
+- **True MP3 Audio Generation**: Every Arabic string is run through a custom pipeline that hits the Google TTS API to generate and cache highly accurate, native-sounding MP3 files (`public/audio/`).
+- **Offline-First & Gamified**: Powered entirely on the client side via `localStorage`. Earn XP, level up your clinical rank, and track progress without needing an internet connection on the clinic floor.
 
 ## 🛠️ Tech Stack
 
-* **Framework:** React 18 & Vite
-* **Routing:** `@tanstack/react-router` (File-based routing)
-* **Styling:** Tailwind CSS & `shadcn/ui` (Radix Primitives)
-* **State/Caching:** `@tanstack/react-query` & Custom Hooks
-* **Deployment target:** Cloudflare Pages (Nitro preset)
+- **Framework:** React 18 & Vite
+- **Routing:** `@tanstack/react-router` (File-based routing)
+- **Styling:** Tailwind CSS & `shadcn/ui` (Radix Primitives)
+- **State/Caching:** `@tanstack/react-query` & Custom Hooks
+- **Deployment target:** Cloudflare Pages (Nitro preset)
 
 ## 📦 Local Development
 
 1. **Install dependencies:**
+
    ```bash
    npm install
    # or
@@ -29,6 +30,7 @@ Med-Arabic-Hub is a dedicated, offline-first mobile web application designed to 
    ```
 
 2. **Start the development server:**
+
    ```bash
    npm run dev
    ```
@@ -49,7 +51,7 @@ The curriculum data is decoupled into modular files located in `src/data/weeks/`
    ```bash
    npm run generate:audio
    ```
-   *(This script will hash every Arabic string, skip existing MP3s, and download any new pronunciations to `public/audio/`)*
+   _(This script will hash every Arabic string, skip existing MP3s, and download any new pronunciations to `public/audio/`)_
 
 ## 🤝 Contributing
 

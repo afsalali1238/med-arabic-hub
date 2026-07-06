@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
-const araCoursePath = 'C:\\Users\\HP\\Desktop\\antigravity\\Ara\\src\\data\\course.ts';
-const physioCoursePath = 'C:\\Users\\HP\\Desktop\\antigravity\\physio\\src\\data\\course.ts';
+const araCoursePath = "C:\\Users\\HP\\Desktop\\antigravity\\Ara\\src\\data\\course.ts";
+const physioCoursePath = "C:\\Users\\HP\\Desktop\\antigravity\\physio\\src\\data\\course.ts";
 
 // We can extract the raw text or we can just run a regex/ast parse.
 // A simpler way: we just read both files as strings, but since they are TypeScript, we can't `require` them easily without compiling.
@@ -10,8 +10,17 @@ const physioCoursePath = 'C:\\Users\\HP\\Desktop\\antigravity\\physio\\src\\data
 // But wait, if I import them, I get JS objects. I'd have to serialize them back to TS code, which means JSON.stringify.
 // But `course.ts` contains `export type ...` and `export const COURSE_TITLE ...`. I can just rewrite the whole file with JSON.stringify for WEEKS, like I did earlier!
 
-import { WEEKS as araWeeks } from '../Ara/src/data/course';
-import { WEEKS as physioWeeks, COURSE_TITLE, COURSE_SUBTITLE, CAPSTONE, LEVELS, XP_PER_QUIZ, XP_PER_FLASHCARD, XP_PER_WEEK } from './src/data/course';
+import { WEEKS as araWeeks } from "../Ara/src/data/course";
+import {
+  WEEKS as physioWeeks,
+  COURSE_TITLE,
+  COURSE_SUBTITLE,
+  CAPSTONE,
+  LEVELS,
+  XP_PER_QUIZ,
+  XP_PER_FLASHCARD,
+  XP_PER_WEEK,
+} from "./src/data/course";
 
 const weeksToAdd = [
   araWeeks[0], // Dispensing & Admin (rename to Clinical Administration)
@@ -25,10 +34,10 @@ let nextNumber = physioWeeks.length + 1;
 for (const w of weeksToAdd) {
   w.id = `week-${nextNumber}`;
   w.number = nextNumber;
-  
+
   if (w.title === "Dispensing & Administrative Basics") w.title = "Clinical Administration Basics";
   if (w.title === "Symptoms & OTC Triage") w.title = "General Symptoms & Triage";
-  
+
   physioWeeks.push(w);
   nextNumber++;
 }

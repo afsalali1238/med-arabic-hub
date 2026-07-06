@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
-const COURSE_FILE = path.join(process.cwd(), 'src/data/course.ts');
-const WEEKS_DIR = path.join(process.cwd(), 'src/data/weeks');
+const COURSE_FILE = path.join(process.cwd(), "src/data/course.ts");
+const WEEKS_DIR = path.join(process.cwd(), "src/data/weeks");
 
 async function splitWeeks() {
   if (!fs.existsSync(WEEKS_DIR)) {
@@ -10,23 +10,32 @@ async function splitWeeks() {
   }
 
   // Use ts-node/tsx to import the current data
-  const { WEEKS, COURSE_TITLE, COURSE_SUBTITLE, CAPSTONE, LEVELS, XP_PER_QUIZ, XP_PER_FLASHCARD, XP_PER_WEEK } = await import('../src/data/course');
+  const {
+    WEEKS,
+    COURSE_TITLE,
+    COURSE_SUBTITLE,
+    CAPSTONE,
+    LEVELS,
+    XP_PER_QUIZ,
+    XP_PER_FLASHCARD,
+    XP_PER_WEEK,
+  } = await import("../src/data/course");
 
-  let imports = [];
-  let weekNames = [];
+  const imports = [];
+  const weekNames = [];
 
   for (const week of WEEKS) {
     const varName = `week${week.number}`;
     const filename = `week${week.number}.ts`;
     const filepath = path.join(WEEKS_DIR, filename);
-    
+
     const content = `import { Week } from "../course";
 
 export const ${varName}: Week = ${JSON.stringify(week, null, 2)};
 `;
     fs.writeFileSync(filepath, content);
     console.log("Created", filename);
-    
+
     imports.push(`import { ${varName} } from "./weeks/week${week.number}";`);
     weekNames.push(varName);
   }
@@ -75,7 +84,7 @@ export interface Week {
   scenario: Scenario;
 }
 
-${imports.join('\n')}
+${imports.join("\n")}
 
 export const COURSE_TITLE = ${JSON.stringify(COURSE_TITLE)};
 export const COURSE_SUBTITLE = ${JSON.stringify(COURSE_SUBTITLE)};
@@ -83,7 +92,7 @@ export const COURSE_SUBTITLE = ${JSON.stringify(COURSE_SUBTITLE)};
 export const CAPSTONE = ${JSON.stringify(CAPSTONE, null, 2)};
 
 export const WEEKS: Week[] = [
-  ${weekNames.join(',\n  ')}
+  ${weekNames.join(",\n  ")}
 ];
 
 export interface VocabEntry {
@@ -116,7 +125,7 @@ export function levelForXp(xp: number) {
 `;
 
   fs.writeFileSync(COURSE_FILE, newCourseTs);
-  console.log('course.ts has been updated successfully.');
+  console.log("course.ts has been updated successfully.");
 }
 
 splitWeeks().catch(console.error);

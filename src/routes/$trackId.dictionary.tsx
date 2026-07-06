@@ -32,9 +32,7 @@ function DictionaryRoute() {
       w.vocabTables.forEach((table) => {
         table.rows.forEach((row) => {
           // Avoid duplicate English/Arabic pairs within the dictionary
-          const isDup = entries.some(
-            (e) => e.english === row[0] && e.arabic === row[1]
-          );
+          const isDup = entries.some((e) => e.english === row[0] && e.arabic === row[1]);
           if (!isDup && row[0] && row[1]) {
             entries.push({
               english: row[0],
@@ -66,7 +64,7 @@ function DictionaryRoute() {
           e.english.toLowerCase().includes(q) ||
           e.arabic.includes(q) ||
           e.transliteration.toLowerCase().includes(q) ||
-          (e.context && e.context.toLowerCase().includes(q))
+          (e.context && e.context.toLowerCase().includes(q)),
       );
     }
 
@@ -76,7 +74,7 @@ function DictionaryRoute() {
   // Check if a dictionary entry is saved in Vocab Bank
   const getSavedEntry = (entry: DictionaryEntry) => {
     return progress.vocabBank.find(
-      (v) => v.arabic === entry.arabic && v.transliteration === entry.transliteration
+      (v) => v.arabic === entry.arabic && v.transliteration === entry.transliteration,
     );
   };
 
@@ -162,7 +160,10 @@ function DictionaryRoute() {
                       <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground mb-1.5">
                         Week {e.weekNumber}
                       </span>
-                      <p className="text-base font-semibold text-foreground leading-tight truncate" title={e.english}>
+                      <p
+                        className="text-base font-semibold text-foreground leading-tight truncate"
+                        title={e.english}
+                      >
                         {e.english}
                       </p>
                     </div>
@@ -188,12 +189,13 @@ function DictionaryRoute() {
                     </div>
                   </div>
 
-                  <p dir="rtl" className="mt-3 font-arabic text-xl sm:text-2xl text-primary font-bold">
+                  <p
+                    dir="rtl"
+                    className="mt-3 font-arabic text-xl sm:text-2xl text-primary font-bold"
+                  >
                     {e.arabic}
                   </p>
-                  <p className="mt-1 font-mono text-sm text-foreground/80">
-                    {e.transliteration}
-                  </p>
+                  <p className="mt-1 font-mono text-sm text-foreground/80">{e.transliteration}</p>
 
                   {e.context && (
                     <p className="mt-2 text-xs text-muted-foreground border-t border-border/45 pt-2 leading-relaxed">
